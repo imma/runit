@@ -3,9 +3,7 @@
 function bootstrap {
   case "$(uname -s)" in
     Darwin)
-      if [[ -x "$(which brew 1>&2 || true)" ]]; then
-        brew install runit
-      fi
+      brew install runit
       ;;
     Linux)
       sudo aptitude install -y runit
