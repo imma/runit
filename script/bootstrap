@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function bootstrap {
+  case "$(uname -s)" in
+    Darwin)
+      if [[ -x "$(which brew 1>&2 || true)" ]]; then
+        brew install runit
+      fi
+      ;;
+    Linux)
+      sudo aptitude install -y runit
+      ;;
+  esac
+}
+
+bootstrap
