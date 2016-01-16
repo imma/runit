@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
 function bootstrap {
-  case "$(uname -s)" in
-    Darwin)
-      brew install runit
-      ;;
-    Linux)
-      sudo aptitude install -y runit
-      ;;
-  esac
+  pkg ensure sysutils/runit
 }
 
 bootstrap
