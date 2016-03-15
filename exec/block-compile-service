@@ -46,7 +46,7 @@ function add_env {
 }
 
 function read_services {
-  cat "services.json"
+  cat "service.json"
 }
 
 function service_as_args {
@@ -61,13 +61,15 @@ function main {
   cd "$BUILD_DIR"
 
   if [[ "$#" == 0 ]]; then
-    if [[ -f "services.json" ]]; then
-      read_services | service_as_args | while read -r a; do
-        eval set -- $a
-        main $BUILD_DIR $CACHE_DIR $ENV_DIR "$@"
-      done
+    if [[ ! -f "service.json" ]]; then
+      echo "ERROR: no arguments, no service.json, exiting" 1>&2
+      return 1
     fi
-    return 1
+
+    read_services | service_as_args | while read -r a; do
+      eval set -- $a
+      main $BUILD_DIR $CACHE_DIR $ENV_DIR "$@"
+    done
   else
     local nm_service="$1"; shift
     local nm_provider="$1"; shift
