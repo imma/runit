@@ -2,6 +2,7 @@
 
 function bootstrap {
   pkg ensure sysutils/runit
+  pkg ensure sysutils/daemontools
 }
 
 bootstrap
