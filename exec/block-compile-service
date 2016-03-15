@@ -6,8 +6,34 @@ function indent {
 
 function new_service {
   local nm_service="$1"; shift
+  local nm_run="$1"; shift
 
+  local tmp_runit="$(mktemp -d -t XXXXXX)"
   mkdir -p "${BUILD_DIR}/sv/${nm_service}" 
+
+  mkdir -p "${tmp_runit}/log"
+  cat > "${tmp_runit}/log/run" <<"__EOF"
+#!/usr/bin/env bash
+exec 2>&1
+exec envdir ../env svlogd -tt .
+__EOF
+  chmod 755 "${tmp_runit}/log/run"
+
+  cat <<"__EOF" | env nm_run="$nm_run" envsubst > "${tmp_runit}/run"
+#!/usr/bin/env bash
+exec 2>&1
+exec envdir ./env ${nm_run}
+__EOF
+  chmod 755 "${tmp_runit}/run"
+
+  if [[ -d "${BUILD_DIR}/sv/${nm_service}" ]]; then
+    mv "${BUILD_DIR}/sv/${nm_service}" "${BUILD_DIR}/sv/${nm_service}.$$.old"
+  fi
+
+  mv "${tmp_runit}" "${BUILD_DIR}/sv/${nm_service}.$$.new" 
+  chmod 755 "${BUILD_DIR}/sv/${nm_service}.$$.new"
+  mv "${BUILD_DIR}/sv/${nm_service}.$$.new" "${BUILD_DIR}/sv/${nm_service}"
+  rm -rf "${BUILD_DIR}/sv/${nm_service}.$$.old"
 }
 
 function add_env {
@@ -24,7 +50,7 @@ function read_services {
 }
 
 function service_as_args {
-  jq -r '.services | to_entries[] | "\(.value.provider) \(.key) \(reduce (.value.env | to_entries[]) as $ele (""; . + " " + "\($ele.key)=\(@sh "\($ele.value)")"))"'
+  jq -r '.services | to_entries[] | "\(.key) \(@sh "\(.value.run //"block service \(.value.provider)")") \(reduce (.value.env | to_entries[]) as $ele (""; . + " " + "\($ele.key)=\(@sh "\($ele.value)")"))"'
 }
 
 function main {
@@ -43,11 +69,11 @@ function main {
     fi
     return 1
   else
-    local nm_provider="$1"; shift
     local nm_service="$1"; shift
+    local nm_provider="$1"; shift
     
     echo "-----> Creating runit service $nm_service ($nm_provider)"
-    new_service "$nm_service"
+    new_service "$nm_service" "$nm_provider"
     while [[ "$#" -gt 0 ]]; do
       if [[ "$1" =~ ^[_a-zA-Z][_a-zA-Z0-9]*= ]]; then
         local nm_env="${1%%=*}"

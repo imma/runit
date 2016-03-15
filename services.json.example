@@ -1,0 +1,17 @@
+{
+  "services": {
+    "memcache1": {
+      "run": "env",
+      "env": {
+        "PORT": "11211"
+      }
+    },
+    "memcache2": {
+      "provider": "memcache",
+      "env": {
+        "PORT": "11212",
+        "COMMENT": "this has spaces"
+      }
+    }
+  }
+}
