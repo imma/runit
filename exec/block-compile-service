@@ -8,32 +8,23 @@ function new_service {
   local nm_service="$1"; shift
   local nm_run="$1"; shift
 
-  local tmp_runit="$(mktemp -d -t XXXXXX)"
-  mkdir -p "${BUILD_DIR}/sv/${nm_service}" 
+  local pth_service="${BUILD_DIR}/sv/${nm_service}" 
+  mkdir -p "${pth_service}"
 
-  mkdir -p "${tmp_runit}/log"
-  cat > "${tmp_runit}/log/run" <<"__EOF"
+  mkdir -p "${pth_service}/log"
+  cat > "${pth_service}/log/run" <<"__EOF"
 #!/usr/bin/env bash
 exec 2>&1
 exec envdir ../env svlogd -tt .
 __EOF
-  chmod 755 "${tmp_runit}/log/run"
+  chmod 755 "${pth_service}/log/run"
 
-  cat <<"__EOF" | env nm_run="$nm_run" envsubst > "${tmp_runit}/run"
+  cat <<"__EOF" | env nm_run="$nm_run" envsubst > "${pth_service}/run"
 #!/usr/bin/env bash
 exec 2>&1
 exec envdir ./env ${nm_run}
 __EOF
-  chmod 755 "${tmp_runit}/run"
-
-  if [[ -d "${BUILD_DIR}/sv/${nm_service}" ]]; then
-    mv "${BUILD_DIR}/sv/${nm_service}" "${BUILD_DIR}/sv/${nm_service}.$$.old"
-  fi
-
-  mv "${tmp_runit}" "${BUILD_DIR}/sv/${nm_service}.$$.new" 
-  chmod 755 "${BUILD_DIR}/sv/${nm_service}.$$.new"
-  mv "${BUILD_DIR}/sv/${nm_service}.$$.new" "${BUILD_DIR}/sv/${nm_service}"
-  rm -rf "${BUILD_DIR}/sv/${nm_service}.$$.old"
+  chmod 755 "${pth_service}/run"
 }
 
 function add_env {
