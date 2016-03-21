@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  local nm_service="$1"; shift
+  exec tail -f "$@" "$SVDIR/${nm_service}/log/current"
+}
+
+source sub "$BASH_SOURCE" "$@"
