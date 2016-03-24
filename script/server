@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function runit_server {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  cd "${SVDIR}"
+  exec runsvdir -P "${SVDIR}"
+}
+
+runit_server "$@"
