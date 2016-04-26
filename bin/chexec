@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function main {
+  local pth_dir="$1"; shift
+  cd $pth_dir
+  exec "$@"
+}
+
+main "$@"
