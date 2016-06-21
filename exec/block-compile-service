@@ -16,6 +16,7 @@ function new_service {
   cat > "${pth_service}/log/run" <<"__EOF"
 #!/usr/bin/env bash
 exec 2>&1
+source "$HOME/.bashrc"
 exec envdir ../env svlogd -tt .
 __EOF
   chmod 755 "${pth_service}/log/run"
@@ -23,6 +24,7 @@ __EOF
   cat <<"__EOF" | env nm_run="$nm_run" envsubst > "${pth_service}/run"
 #!/usr/bin/env bash
 exec 2>&1
+source "$HOME/.bashrc"
 exec envdir ./env ${nm_run}
 __EOF
   chmod 755 "${pth_service}/run"
