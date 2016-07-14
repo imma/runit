@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
 function bootstrap {
-  pkg ensure sysutils/runit
   pkg ensure sysutils/daemontools
+
+	case "$(uname -s)" in
+		Darwin)
+			brew install runit
+			;;
+		Linux)
+			sudo aptitude install -y runit
+			;;
+	esac
 }
 
 bootstrap
