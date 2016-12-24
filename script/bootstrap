@@ -8,7 +8,7 @@ function bootstrap {
 			brew install runit
 			;;
 		Linux)
-			sudo aptitude install -y runit
+			sudo -E aptitude install -y runit
 			;;
 	esac
 }
