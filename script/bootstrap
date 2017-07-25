@@ -8,7 +8,7 @@ function bootstrap {
 			brew install runit
 			;;
 		Linux)
-			sudo -E apt-get install -y runit
+			${NOSUDO} sudo -E apt-get install -y runit
 			;;
 	esac
 }
