@@ -1,1 +1,1 @@
-Visit http://defn.sh/runit/ or open `docs/index.html`
+content/runit.md
