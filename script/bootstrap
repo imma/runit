@@ -9,7 +9,7 @@ function bootstrap {
 
   rsync -ia $PKGWIPDIR/runit/. $PKGSRCDIR/sysutils/runit/.
   if ! pkg ensure sysutils/runit; then
-    perl -pe 's{-static}{}' -i "$WRKOBJDIR/sysutils/runit/work/admin/runit-2.0.0/compile/Makefile"
+    perl -pe 's{-static}{}' -i "$WRKOBJDIR/sysutils/runit/work/admin/runit-2.0.0/src/Makefile"
     pkg ensure sysutils/runit
   fi
 }
