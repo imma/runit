@@ -7,16 +7,17 @@ function bootstrap {
     pkg ensure sysutils/daemontools
   fi
 
+  rsync -ia $PKGWIPDIR/runit/. $PKGSRCDIR/sysutils/runit/.
+
+  return 0
+
 	case "${DISTRIB_ID}" in
 		Darwin)
 			brew install runit
 			;;
-		Ubuntu)
-			${NOSUDO} sudo -E apt-get install -y runit
-			;;
-		Amazon)
-			echo "WTF"
-			;;
+		Ubuntu|Amazon)
+      pkg ensure sysutils/runit
+      ;;
 	esac
 }
 
