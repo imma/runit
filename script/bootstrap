@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 function bootstrap {
-  pkg ensure sysutils/daemontools
+  if ! pkg ensure sysutils/daemontools; then
+    mkdir -p "$WRKOBJDIR/sysutils/daemontools/work/.destdir/$HOME/install/bin"
+    touch "$WRKOBJDIR/sysutils/daemontools/work/.destdir/$HOME/install/bin/svscanboot"
+    pkg ensure sysutils/daemontools
+  fi
 
 	case "${DISTRIB_ID}" in
 		Darwin)
