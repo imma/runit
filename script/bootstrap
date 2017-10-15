@@ -3,12 +3,15 @@
 function bootstrap {
   pkg ensure sysutils/daemontools
 
-	case "$(uname -s)" in
+	case "${DISTRIB_ID}" in
 		Darwin)
 			brew install runit
 			;;
-		Linux)
+		Ubuntu)
 			${NOSUDO} sudo -E apt-get install -y runit
+			;;
+		Amazon)
+			echo "WTF"
 			;;
 	esac
 }
