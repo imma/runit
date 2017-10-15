@@ -7,7 +7,7 @@ function bootstrap {
     pkg ensure sysutils/daemontools
   fi
 
-  rsync -ia $PKGWIPDIR/runit/. $PKGSRCDIR/sysutils/runit/.
+  rsync -ia $PKGWIPDIR/runit $PKGSRCDIR/sysutils/
   if ! pkg ensure sysutils/runit; then
     perl -pe 's{-static}{}' -i "$WRKOBJDIR/sysutils/runit/work/admin/runit-2.0.0/src/Makefile"
     pkg ensure sysutils/runit
