@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  local cmd_sv="$(which "${PKG_HOME:-}/install/bin/sv" "${PKG_HOME:-}/install/sbin/sv" "${BOARD_PATH:-$HOME}/homebrew/bin/sv" /usr/local/bin/sv /usr/bin/sv)"
+  local cmd_sv="$(which "${PKG_HOME:-}/install/bin/sv" "${PKG_HOME:-}/install/sbin/sv" "${BOARD_PATH:-$HOME}/homebrew/bin/sv" /usr/local/bin/sv /usr/bin/sv | head -1)"
   if [[ -x "$cmd_sv" ]]; then
     exec "$cmd_sv" "$@"
   else
