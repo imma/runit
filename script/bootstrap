@@ -7,11 +7,18 @@ function bootstrap {
     pkg ensure sysutils/daemontools
   fi
 
+  case "${DISTRIB_ID}" in
+    Linux)
+      ${NOSUDO} sudo apk add runit
+      ;;
+    *)
   rsync -ia $PKGWIPDIR/runit $PKGSRCDIR/sysutils/
   if ! pkg ensure sysutils/runit; then
     perl -pe 's{-static}{}' -i "$WRKOBJDIR/sysutils/runit/work/admin/runit-2.0.0/src/Makefile"
     pkg ensure sysutils/runit
   fi
+      ;;
+  esac
 }
 
 bootstrap
