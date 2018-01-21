@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+function main {
+  if [[ ! -x "$(type -P runsvdir)" ]]; then
+    return 1
+  fi
+
+  if [[ ! -x "$(type -P envdir)" ]]; then
+    return 1
+  fi
+
+  return 0
+}
+
+source sub "$0" "$@"
