@@ -17,7 +17,7 @@ function bootstrap {
     Darwin)
       ${NOSUDO} brew install runit
       ;;
-    Linux)
+    Alpine)
       ${NOSUDO} sudo apk add runit
       ;;
   esac
