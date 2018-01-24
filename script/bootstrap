@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 function bootstrap {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+
   if ! pkg ensure sysutils/daemontools; then
     mkdir -p "$WRKOBJDIR/sysutils/daemontools/work/.destdir/$HOME/install/bin"
     touch "$WRKOBJDIR/sysutils/daemontools/work/.destdir/$HOME/install/bin/svscanboot"
@@ -12,7 +14,9 @@ function bootstrap {
       ${NOSUDO} sudo apt-get install -y runit
       ;;
     Amazon|CentOS)
-      ${NOSUDO} sudo yum install -y runit
+      mkdir -p "$PKGSRCDIR/sysutils/runit"
+      rsync -ia "$shome/dist/runit/." "$PKGSRCDIR/sysutils/runit/."
+      pkg ensure sysutils/runit
       ;;
     Darwin)
       ${NOSUDO} brew install runit
